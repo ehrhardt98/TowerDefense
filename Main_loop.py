@@ -4,7 +4,6 @@ from Funcoes import *
 from Classes import *
 from Mapa import *
 
-#Construindo as Torres
 
 pygame.init()
 
@@ -13,10 +12,6 @@ display_height = 600
 
 
 
-chaves = Invasores(10, 380, 210, -1, 1, "sprite_1.png", "sprite_2.png", "sprite_3.png")
-castelo = Castelo(10, 10, 10, "DIRT.png")
-torre = Torres(1, 2, 1, 1, "TOWER.png", "agua")
-lista_torres = []
 
 gameDisplay = pygame.display.set_mode((display_width, display_height))
 pygame.display.set_caption("Tower Defense")
