@@ -1,7 +1,7 @@
 import pygame
 import time
 import os, sys
-import Funcoes
+from Funcoes import *
 from Mapa import *
 
 clock = pygame.time.Clock()
@@ -16,8 +16,6 @@ class Torres:
 		self.custo = custo
 		self.dps = dps
 		self.propriedade = propriedade
-		self.posicao = [0,0]
-		self.distancia = 0
 
 	def comprar(self, jogador):
 		if jogador.dinheiro >= self.custo:
@@ -43,21 +41,20 @@ class Torres:
 					displaySurf.blit(self.imagem, (self.posicaox, self.posicaoy))
 					pygame.display.update()	
 					lista_torres.append(self)
-					return pixel_matriz(self.posicaox, self.posicaoy)
+					f = pixel_matriz(self.posicaox, self.posicaoy)
+					return f
 			else:
 				return [1800, 1800]
 
 
 
 	def distancia(self, inimigo):
-		self.distancia = ((self.posicao[0] - inimigo.posicaox)**2 + (self.posicao[1] - inimigo.posicaoy)**2)**0.5
-		return self.distancia
+		self.distancia = ((self.posicaox - inimigo.posicaox)**2 + (self.posicaoy - inimigo.posicaoy)**2)**0.5
 
 	def atacar(self, inimigo):
 		if self.distancia >= self.raio:
 			inimigo.vida = inimigo.vida - self.ataque
 			print(inimigo.vida)
-			print(self.ataque)
 			time.sleep(self.dps)
 
 
