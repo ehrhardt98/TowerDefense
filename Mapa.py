@@ -125,5 +125,3 @@ def mapa():
 			DISPLAYSURF.blit(textures[tilemap[row][column]], (column*TILESIZE,row*TILESIZE))
 	return DISPLAYSURF
 mapa()
-
- 

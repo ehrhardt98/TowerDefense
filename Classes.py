@@ -1,11 +1,17 @@
 import pygame
 import time
 import os, sys
-from Funcoes import *
+import Funcoes
 from Mapa import *
 
 clock = pygame.time.Clock()
 
+def pixel_matriz(pixelx, pixely):
+	x = pixelx//40
+	y = pixely//40
+	posicaox = 40 * (x)
+	posicaoy = 40 * (y)
+	return [posicaox, posicaoy]
 
 
 class Torres:
@@ -16,10 +22,11 @@ class Torres:
 		self.custo = custo
 		self.dps = dps
 		self.propriedade = propriedade
+		self.posicao = [0,0]
+		self.distancia = 0
 
 	def comprar(self, jogador):
 		if jogador.dinheiro >= self.custo:
-			jogador.dinheiro = jogador.dinheiro - self.custo
 			return True
 		else:
 			return False
@@ -28,7 +35,7 @@ class Torres:
 	def posicionar(self, displaySurf, lista_torres, jogador):
 		time.sleep(0.5)
 		dinheiro_disponivel = self.comprar(jogador)
-		while True:
+		while dinheiro_disponivel:
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT:
 					pygame.quit()
@@ -36,35 +43,50 @@ class Torres:
 
 			if dinheiro_disponivel == True:
 				if pygame.mouse.get_pressed()[0] == 1:
-					self.posicaoy = pygame.mouse.get_pos()[1]
-					self.posicaox = pygame.mouse.get_pos()[0]
+					self.posicaoy = pixel_matriz(pygame.mouse.get_pos()[1], pygame.mouse.get_pos()[0])[0]
+					self.posicaox = pixel_matriz(pygame.mouse.get_pos()[1], pygame.mouse.get_pos()[0])[1]
+					jogador.dinheiro = jogador.dinheiro - self.custo
 					displaySurf.blit(self.imagem, (self.posicaox, self.posicaoy))
 					pygame.display.update()	
-					lista_torres.append(self)
-					f = pixel_matriz(self.posicaox, self.posicaoy)
-					return f
+					lista_torres.append(self)	
+					return [self.posicaox, self.posicaoy]
 			else:
 				return [1800, 1800]
 
 
 
-	def distancia(self, inimigo):
-		self.distancia = ((self.posicaox - inimigo.posicaox)**2 + (self.posicaoy - inimigo.posicaoy)**2)**0.5
+	#def distancia(self, inimigo):
+		distancia = []
+		for x in inimigo:
+			self.distancia = ((self.posicao[0] - x.posicaox)**2 + (self.posicao[1] - x.posicaoy)**2)**0.5
+			distancias.append(self.distancia)
+		return self.distancia
 
-	def atacar(self, inimigo):
-		if self.distancia >= self.raio:
+	#def atacar(self, inimigo):
+		if self.distancia <= self.raio:
 			inimigo.vida = inimigo.vida - self.ataque
 			print(inimigo.vida)
+			print(self.ataque)
 			time.sleep(self.dps)
 
 
 
 class Castelo:
-	def __init__(self, vida, posicao_x, posicao_y, imagem):
+	def __init__(self, vida, posicao_x, posicao_y):
 		self.vida = vida
 		self.posicaox = posicao_x
 		self.posicaoy = posicao_y
-		self.imagem = pygame.image.load(imagem)
+	
+		
+
+
+
+	def perdevida(self, invasores):
+		self.vida = self.vida - 1
+		print (self.vida)
+		if self.vida <= 0:
+			t = 4
+			return t
 
 
 
@@ -82,7 +104,8 @@ class Invasores:
 		self.dinheiro = dinheiro
 	def morte(self):
 		if self.vida <= 0:			
-			chaves = Invasores(10, 0, 0, 0, 10, "sprite_1.png", "sprite_2.png", "sprite_3.png")
+			chaves = Invasores(10, 0, 0, 0, 10, "sprite_1.png", "sprite_2.png", "sprite_3.png", 2)
+
 
 class Jogador:
 	def __init__(self, vida, dinheiro):
@@ -90,10 +113,13 @@ class Jogador:
 		self.dinheiro = dinheiro
 
 	def ganhadinheiro(self, invasores):
-		if invasores.vida < 0:
-			self.dinheiro = self.dinheiro + invasores.dinheiro
+			if invasores.vida < 0:
+				self.dinheiro = self.dinheiro + invasores.dinheiro
 	
-	def mostradinheiro(self, gameDisplay):
+	def mostradinheiro(self, gameDisplay, lista_torres):
+		mapa()
+		for i in lista_torres:
+			gameDisplay.blit(i.imagem, (i.posicaox, i.posicaoy))
 		text = pygame.font.Font("freesansbold.ttf", 10)
 		TextSurf, TextRect = text_objects("Dinheiro: {0}".format(self.dinheiro), text)
 		TextRect.center = ((20 + 20/2)), ((30 + 30/2))

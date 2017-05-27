@@ -12,7 +12,6 @@ display_height = 600
 
 
 
-
 gameDisplay = pygame.display.set_mode((display_width, display_height))
 pygame.display.set_caption("Tower Defense")
 clock = pygame.time.Clock()
@@ -35,7 +34,7 @@ while not fechar:
 		state = game_intro(gameDisplay)
 
 	if state == 1:
-		state = game_loop(chaves)
+		state = game_loop(invasoress)
 
 
 	pygame.display.update()
