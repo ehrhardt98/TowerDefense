@@ -8,21 +8,23 @@ pygame.init()
 black = (0, 0, 0)
 white = (255, 255, 255)
 red = (255, 0, 0)
-green = (0, 200, 0)
-bright_green = (0, 250, 0)
+yellow = (255,255,100)
+bright_yellow = (255,255,0)
+logo0 = "logo0.png"
+logo1 = "logo1.png"
 
-zumbi1 = Invasores(10, 1600, 245, -20, 10, "sprite_1.png", "sprite_2.png", "sprite_3.png", 2)
-zumbi2 = Invasores(10, 1620, 245, -20, 10, "sprite_1.png", "sprite_2.png", "sprite_3.png", 2)
-zumbi3 = Invasores(10, 1640, 245, -20, 10, "sprite_1.png", "sprite_2.png", "sprite_3.png", 2)
-zumbi4 = Invasores(10, 1660, 245, -20, 10, "sprite_1.png", "sprite_2.png", "sprite_3.png", 2)
+
+zumbi1 = Invasores(10, 1200, 160, -10, 10, "zombie04.png", "zombie05.png", "zombie06.png", 2)
+zumbi2 = Invasores(10, 1220, 160, -10, 10, "zombie04.png", "zombie05.png", "zombie06.png", 2)
+zumbi3 = Invasores(10, 1240, 160, -10, 10, "zombie04.png", "zombie05.png", "zombie06.png", 2)
+zumbi4 = Invasores(10, 1260, 160, -10, 10, "zombie04.png", "zombie05.png", "zombie06.png", 2)
 invasoress = [zumbi1, zumbi2, zumbi3, zumbi4]
 
-
 castelo = Castelo(10, 80,1)
-torre1 = Torres(1, 10, 1, 10, "TORREE.png", "agua")
-torre2 = Torres(1, 10, 1, 10, "TORREE.png", "agua")
-torre3 = Torres(1, 10, 1, 10, "TORREE.png", "agua")
-torre4 = Torres(1, 10, 1, 10, "TORREE.png", "agua")
+torre1 = Torres(10, 100, 1, 10, "torrechoque_4.png", "agua")
+torre2 = Torres(10, 100, 1, 10, "torrefogo_0.png", "agua")
+torre3 = Torres(10, 100, 1, 5, "torredegelo0.png", "agua")
+torre4 = Torres(10, 100, 1, 5, "TORREE.png", "agua")
 jogador = Jogador(10, 25)
 lista_torres = []
 
@@ -94,14 +96,22 @@ def movimentar(invasores, displaySurface):
 			castelo.perdevida(invasores)
 
 
-def button(gameDisplay, msg, x, y, w, h, ic, ac, action, tamanho_letra, imagem):
+def button(gameDisplay, msg, x, y, w, h, ic, ac, action, tamanho_letra, imagem, imagem2):
 	mouse = pygame.mouse.get_pos()
 	click = pygame.mouse.get_pressed()
 
 	if msg == "none":
 		image = pygame.image.load(imagem)
+		
 		gameDisplay.blit(image, (x, y))
 		if x + w > mouse[0] > x and y + h > mouse[1] > y and action == "position":
+			image2 = pygame.image.load(imagem2)
+			gameDisplay.blit(image2, (x, y))
+			if click[0] == 1:
+				return 1
+		if x + w > mouse[0] > x and y + h > mouse[1] > y and action == "start":
+			image2 = pygame.image.load(imagem2)
+			gameDisplay.blit(image2, (x, y))
 			if click[0] == 1:
 				return 1
 
@@ -149,7 +159,7 @@ def game_intro(gameDisplay):
 
 		gameDisplay.fill(white)
 
-		x = button(gameDisplay, "Defend your Castle!", 200, 270, 400, 50, green, bright_green, "start", 40, 0)
+		x = button(gameDisplay, "none", 200, 200, 400, 400, yellow, bright_yellow, "start", 40, "logo0.png", "logo1.png")
 
 		if x == 1:
 			break
@@ -183,11 +193,11 @@ def game_loop(invasores):
 						quit()
 				variavel_aux = 0
 				if  variavel_aux == 0:
-					y = button(surface, "none", 150, 30, 30, 30, green, bright_green, "position", 10, "TORREE.png")
-					x = button(surface, "none", 185, 30, 30, 30, green, bright_green, "position", 10, "TORREE.png")
-					z = button(surface, "none", 220, 30, 30, 30, green, bright_green, "position", 10, "TORREE.png")
-					w = button(surface, "none", 255, 30, 30, 30, green, bright_green, "position", 10, "TORREE.png")
-					print (y,x,z,w)
+					y = button(surface, "none", 0, 60, 30, 30, green, bright_green, "position", 10, "torrechoque_0.png", "torrechoque_4.png")
+					x = button(surface, "none", 0, 105, 30, 30, green, bright_green, "position", 10, "torrefogo_7.png", "torrefogo_0.png")
+					z = button(surface, "none", 0, 150, 30, 30, green, bright_green, "position", 10, "torredegelo0.png", "torredegelo2.png")
+					w = button(surface, "none", 0, 195, 30, 30, green, bright_green, "position", 10, "TORREE.png", "TORREE.png")
+					
 					pygame.display.update()
 					
 					if y == 1:
@@ -204,54 +214,52 @@ def game_loop(invasores):
 						torre4.posicionar(surface, lista_torres, jogador)
 						jogador.mostradinheiro(surface, lista_torres)	
 						
-					y = button(surface, "Wave1", 1500, 310, 50, 20, green, bright_green, "wave", 10, 0)
+					y = button(surface, "Wave1", 1150, 200, 50, 20, green, bright_green, "wave", 10, 0, 0)
 					if y == 2:
 						t = 2
 		elif t == 2:
+
+			zumatacado = invasoress[3]
+			for x in range(0, len(invasoress)):
+				
+				if invasoress[x].posicaox > zumatacado.posicaox:
+					zumatacado = invasoress[x]
+				else:
+					zumatacado = invasoress[x]
+			
 			
 			movimentar(invasoress, surface)
-	
-				#Torres.distancia(torre1,invasores)
-				#Torres.atacar(torre1,invasores)
+			Torres.distancia(torre1, zumatacado)
+			Torres.atacar(torre1, zumatacado)
+			zumatacado.morte(jogador, surface, lista_torres)
+
+			for x in range(0, len(invasoress)):
+				if invasoress[x].posicaox > zumatacado.posicaox:
+					zumatacado = invasoress[x]
 			
-			for x in invasoress:
-				if x.vida <= 0:
-					jogador.ganhadinheiro(x)
-					jogador.mostradinheiro(surface)
-					x.morte()
-					
-
-			if invasoress[0].vida <= 0 and invasoress[1].vida <= 0 and invasoress[2].vida <= 0 and invasores[3].vida <= 0 or invasoress[0].posicaox <= castelo.posicaox and invasoress[1].posicaox <= castelo.posicaox and invasoress[2].posicaox <= castelo.posicaox and invasoress[3].posicaox<= castelo.posicaox:
-				w = button (surface, "Wave2", 1500, 310, 50, 20, green, bright_green, "wave", 10, 0)
-				if w ==   2:
-					t = 3
-
-		elif t == 3:
-
-			zumbi1 = Invasores(10, 1600, 245, -20, 10, "sprite_1.png", "sprite_2.png", "sprite_3.png", 2)
-			zumbi2 = Invasores(10, 1620, 245, -20, 10, "sprite_1.png", "sprite_2.png", "sprite_3.png", 2)
-			zumbi3 = Invasores(10, 1640, 245, -20, 10, "sprite_1.png", "sprite_2.png", "sprite_3.png", 2)
-			zumbi4 = Invasores(10, 1660, 245, -20, 10, "sprite_1.png", "sprite_2.png", "sprite_3.png", 2)
-			
-
-			
-
 			movimentar(invasoress, surface)
-	
-				#Torres.distancia(torre1,invasores)
-				#Torres.atacar(torre1,invasores)
+			Torres.distancia(torre2, zumatacado)
+			Torres.atacar(torre2, zumatacado)
+			zumatacado.morte(jogador, surface, lista_torres)
+			for x in range(0, len(invasoress)):
+				if invasoress[x].posicaox > zumatacado.posicaox:
+					zumatacado = invasoress[x]
 			
-			for x in invasoress:
-				if x.vida < 0:
-					jogador.ganhadinheiro(x)
-					jogador.mostradinheiro(surface)
-					x.morte()
-					
+			movimentar(invasoress, surface)
+			Torres.distancia(torre3, zumatacado)
+			Torres.atacar(torre3,zumatacado)
+			zumatacado.morte(jogador, surface, lista_torres)
+
+			for x in range(0, len(invasoress)):
+				if invasoress[x].posicaox > zumatacado.posicaox:
+					zumatacado = invasoress[x]
+			
+			movimentar(invasoress, surface)
+			Torres.distancia(torre4, zumatacado)
+			Torres.atacar(torre4, zumatacado)
+			zumatacado.morte(jogador, surface, lista_torres)
 
 
-
-			
-			
 
 		pygame.display.update()
 		clock.tick(60)

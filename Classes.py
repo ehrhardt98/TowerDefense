@@ -14,16 +14,17 @@ def pixel_matriz(pixelx, pixely):
 	return [posicaox, posicaoy]
 
 
+
 class Torres:
 	def __init__(self, ataque, raio, dps, custo, imagem, propriedade):
+		self.posicaox = 0
+		self.posicaoy = 0
 		self.ataque = ataque
 		self.imagem = pygame.image.load(imagem)
 		self.raio = raio
 		self.custo = custo
 		self.dps = dps
 		self.propriedade = propriedade
-		self.posicao = [0,0]
-		self.distancia = 0
 
 	def comprar(self, jogador):
 		if jogador.dinheiro >= self.custo:
@@ -47,28 +48,23 @@ class Torres:
 					self.posicaox = pixel_matriz(pygame.mouse.get_pos()[1], pygame.mouse.get_pos()[0])[1]
 					jogador.dinheiro = jogador.dinheiro - self.custo
 					displaySurf.blit(self.imagem, (self.posicaox, self.posicaoy))
-					pygame.display.update()	
-					lista_torres.append(self)	
+					pygame.display.update()
+					lista_torres.append(self)
 					return [self.posicaox, self.posicaoy]
 			else:
 				return [1800, 1800]
 
 
 
-	#def distancia(self, inimigo):
-		distancia = []
-		for x in inimigo:
-			self.distancia = ((self.posicao[0] - x.posicaox)**2 + (self.posicao[1] - x.posicaoy)**2)**0.5
-			distancias.append(self.distancia)
-		return self.distancia
+	def distancia(self, inimigo):
+		self.distancia = ((self.posicaox - inimigo.posicaox)**2 + (self.posicaoy - inimigo.posicaoy)**2)**0.5
+		
 
-	#def atacar(self, inimigo):
+	def atacar(self, inimigo):
 		if self.distancia <= self.raio:
+			print( "atacando")
 			inimigo.vida = inimigo.vida - self.ataque
 			print(inimigo.vida)
-			print(self.ataque)
-			time.sleep(self.dps)
-
 
 
 class Castelo:
@@ -83,7 +79,6 @@ class Castelo:
 
 	def perdevida(self, invasores):
 		self.vida = self.vida - 1
-		print (self.vida)
 		if self.vida <= 0:
 			t = 4
 			return t
@@ -102,9 +97,12 @@ class Invasores:
 		self.sprite2 = pygame.image.load(sprite2)
 		self.sprite3 = pygame.image.load(sprite3)
 		self.dinheiro = dinheiro
-	def morte(self):
+
+	def morte(self, jogador, gameDisplay, lista_torres):
 		if self.vida <= 0:			
-			chaves = Invasores(10, 0, 0, 0, 10, "sprite_1.png", "sprite_2.png", "sprite_3.png", 2)
+			self.posicaox = 10000
+			jogador.ganhadinheiro(self)
+			jogador.mostradinheiro(gameDisplay, lista_torres)
 
 
 class Jogador:
