@@ -62,7 +62,7 @@ class Torres:
 
 	def atacar(self, inimigo):
 		if self.distancia <= self.raio:
-			print( "atacando")
+			
 			inimigo.vida = inimigo.vida - self.ataque
 			print(inimigo.vida)
 

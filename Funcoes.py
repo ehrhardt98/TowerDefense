@@ -18,13 +18,14 @@ zumbi1 = Invasores(10, 1200, 160, -10, 10, "zombie04.png", "zombie05.png", "zomb
 zumbi2 = Invasores(10, 1220, 160, -10, 10, "zombie04.png", "zombie05.png", "zombie06.png", 2)
 zumbi3 = Invasores(10, 1240, 160, -10, 10, "zombie04.png", "zombie05.png", "zombie06.png", 2)
 zumbi4 = Invasores(10, 1260, 160, -10, 10, "zombie04.png", "zombie05.png", "zombie06.png", 2)
-invasoress = [zumbi1, zumbi2, zumbi3, zumbi4]
+zumbi5 = Invasores(10, 1280, 160, -10, 10, "zombie04.png", "zombie05.png", "zombie06.png", 2)
+invasoress = [zumbi1, zumbi2, zumbi3, zumbi4, zumbi5]
 
 castelo = Castelo(10, 80,1)
-torre1 = Torres(10, 100, 1, 10, "torrechoque_4.png", "agua")
-torre2 = Torres(10, 100, 1, 10, "torrefogo_0.png", "agua")
-torre3 = Torres(10, 100, 1, 5, "torredegelo0.png", "agua")
-torre4 = Torres(10, 100, 1, 5, "TORREE.png", "agua")
+torre1 = Torres(2, 100, 1, 5, "torrechoque_4.png", "agua")
+torre2 = Torres(3, 100, 1, 10, "torrefogo_0.png", "agua")
+torre3 = Torres(3, 100, 1, 10, "torredegelo0.png", "agua")
+torre4 = Torres(2, 100, 1, 5, "torrearcoiris0.png", "agua")
 jogador = Jogador(10, 25)
 lista_torres = []
 
@@ -48,10 +49,13 @@ def movimentar(invasores, displaySurface):
 	displaySurface.blit(invasores[1].sprite1, (invasores[1].posicaox, invasores[1].posicaoy))
 	displaySurface.blit(invasores[2].sprite1, (invasores[2].posicaox, invasores[2].posicaoy))
 	displaySurface.blit(invasores[3].sprite1, (invasores[3].posicaox, invasores[3].posicaoy))
+	displaySurface.blit(invasores[4].sprite1, (invasores[4].posicaox, invasores[4].posicaoy))
+
 	invasores[0].posicaox = invasores[0].posicaox + invasores[0].vx
 	invasores[1].posicaox = invasores[1].posicaox + invasores[1].vx
 	invasores[2].posicaox = invasores[2].posicaox + invasores[2].vx
 	invasores[3].posicaox = invasores[3].posicaox + invasores[3].vx
+	invasores[4].posicaox = invasores[4].posicaox + invasores[4].vx
 	time.sleep(0.1)
 	pygame.display.update()
 
@@ -63,10 +67,12 @@ def movimentar(invasores, displaySurface):
 	displaySurface.blit(invasores[1].sprite2, (invasores[1].posicaox, invasores[1].posicaoy))
 	displaySurface.blit(invasores[2].sprite2, (invasores[2].posicaox, invasores[2].posicaoy))
 	displaySurface.blit(invasores[3].sprite2, (invasores[3].posicaox, invasores[3].posicaoy))
+	displaySurface.blit(invasores[4].sprite3, (invasores[4].posicaox, invasores[4].posicaoy))
 	invasores[0].posicaox = invasores[0].posicaox + invasores[0].vx
 	invasores[1].posicaox = invasores[1].posicaox + invasores[1].vx
 	invasores[2].posicaox = invasores[2].posicaox + invasores[2].vx
 	invasores[3].posicaox = invasores[3].posicaox + invasores[3].vx
+	invasores[4].posicaox = invasores[4].posicaox + invasores[4].vx
 	time.sleep(0.1)
 	pygame.display.update()
 
@@ -78,10 +84,12 @@ def movimentar(invasores, displaySurface):
 	displaySurface.blit(invasores[1].sprite3, (invasores[1].posicaox, invasores[1].posicaoy))
 	displaySurface.blit(invasores[2].sprite3, (invasores[2].posicaox, invasores[2].posicaoy))
 	displaySurface.blit(invasores[3].sprite3, (invasores[3].posicaox, invasores[3].posicaoy))
+	displaySurface.blit(invasores[4].sprite3, (invasores[4].posicaox, invasores[4].posicaoy))
 	invasores[0].posicaox = invasores[0].posicaox + invasores[0].vx
 	invasores[1].posicaox = invasores[1].posicaox + invasores[1].vx
 	invasores[2].posicaox = invasores[2].posicaox + invasores[2].vx
 	invasores[3].posicaox = invasores[3].posicaox + invasores[3].vx
+	invasores[4].posicaox = invasores[4].posicaox + invasores[4].vx
 	time.sleep(0.1)
 	pygame.display.update()
 
@@ -156,7 +164,7 @@ def game_intro(gameDisplay):
 def game_loop(invasores):
 	t = 0
 	x = 0
-	file = ("musica1.mp3")
+	file = ("musica2.mp3")
 	pygame.mixer.music.load(file)
 	pygame.mixer.music.play(-1)
 	while True:
@@ -180,7 +188,7 @@ def game_loop(invasores):
 					y = button(surface, "none", 0, 60, 30, 30, green, bright_green, "position", 10, "torrechoque_0.png", "torrechoque_4.png")
 					x = button(surface, "none", 0, 105, 30, 30, green, bright_green, "position", 10, "torrefogo_7.png", "torrefogo_0.png")
 					z = button(surface, "none", 0, 150, 30, 30, green, bright_green, "position", 10, "torredegelo0.png", "torredegelo2.png")
-					w = button(surface, "none", 0, 195, 30, 30, green, bright_green, "position", 10, "TORREE.png", "TORREE.png")
+					w = button(surface, "none", 0, 195, 30, 30, green, bright_green, "position", 10, "torrearcoiris0.png", "torrearcoiris1.png")
 					
 					pygame.display.update()
 					
@@ -198,7 +206,7 @@ def game_loop(invasores):
 						torre4.posicionar(surface, lista_torres, jogador)
 						jogador.mostradinheiro(surface, lista_torres)	
 						
-					y = button(surface, "none", 1050, 200, 100, 50, green, bright_green, "wave", 10, "botaowave.png", "botaowave.png")
+					y = button(surface, "none", 1050, 200, 150, 150, green, bright_green, "wave", 10, "botaowave.png", "botaowave.png")
 					if y == 2:
 						t = 2
 		elif t == 2:
