@@ -86,14 +86,13 @@ def movimentar(invasores, displaySurface):
 	pygame.display.update()
 
 	for x in invasores:
-		if pixel_matriz(x.posicaox, x.posicaoy)[0] == pixel_matriz(castelo.posicaox, castelo.posicaoy)[0]:
+		if pixel_matriz(x.posicaox, x.posicaoy)[0] == pixel_matriz(castelo.posicaox, castelo.posicaoy)[0] or pixel_matriz(x.posicaox, x.posicaoy)[0] < pixel_matriz(castelo.posicaox, castelo.posicaoy)[0] :
 			jogador.mostradinheiro(displaySurface, lista_torres)
 			for i in lista_torres:
 				displaySurface.blit(i.imagem, (i.posicaox, i.posicaoy))
-			x.posicaox = -1000
-			
+			castelo.perdevida(x)
 			pygame.display.update()
-			castelo.perdevida(invasores)
+			
 
 
 def button(gameDisplay, msg, x, y, w, h, ic, ac, action, tamanho_letra, imagem, imagem2):
@@ -115,27 +114,12 @@ def button(gameDisplay, msg, x, y, w, h, ic, ac, action, tamanho_letra, imagem, 
 			if click[0] == 1:
 				return 1
 
-	
-	else:
-		if x + w > mouse[0] > x and y + h > mouse[1] > y and msg != "none":
-			pygame.draw.rect(gameDisplay, ac, (x, y, w, h))
-
-			if click[0] == 1 and action == "start":			
-				return 1
-			if click[0] == 1 and action == "wave":
+		if x + w > mouse[0] > x and y + h > mouse[1] > y and action == "wave":
+			image2 = pygame.image.load(imagem2)
+			gameDisplay.blit(image2, (x, y))
+			if click[0] == 1:
 				return 2
 
-			button_text = pygame.font.Font("freesansbold.ttf", tamanho_letra)
-			TextSurf, TextRect = text_objects(msg, button_text)
-			TextRect.center = ((x + w/2)), ((y + h/2))
-			gameDisplay.blit(TextSurf, TextRect)
-
-		elif msg != "none":
-			pygame.draw.rect(gameDisplay, ic, (x, y, w, h))
-			button_text = pygame.font.Font("freesansbold.ttf", tamanho_letra)
-			TextSurf, TextRect = text_objects(msg, button_text)
-			TextRect.center = ((x + w/2)), ((y + h/2))
-			gameDisplay.blit(TextSurf, TextRect)
 
 	return 0
 
@@ -159,7 +143,7 @@ def game_intro(gameDisplay):
 
 		gameDisplay.fill(white)
 
-		x = button(gameDisplay, "none", 200, 200, 400, 400, yellow, bright_yellow, "start", 40, "logo0.png", "logo1.png")
+		x = button(gameDisplay, "none", 200, 200, 400, 400, yellow, bright_yellow, "start", 40, "logo1.png", "logo0.png")
 
 		if x == 1:
 			break
@@ -214,7 +198,7 @@ def game_loop(invasores):
 						torre4.posicionar(surface, lista_torres, jogador)
 						jogador.mostradinheiro(surface, lista_torres)	
 						
-					y = button(surface, "Wave1", 1150, 200, 50, 20, green, bright_green, "wave", 10, 0, 0)
+					y = button(surface, "none", 1050, 200, 100, 50, green, bright_green, "wave", 10, "botaowave.png", "botaowave.png")
 					if y == 2:
 						t = 2
 		elif t == 2:
@@ -222,44 +206,76 @@ def game_loop(invasores):
 			zumatacado = invasoress[3]
 			for x in range(0, len(invasoress)):
 				
-				if invasoress[x].posicaox > zumatacado.posicaox:
-					zumatacado = invasoress[x]
-				else:
-					zumatacado = invasoress[x]
-			
-			
+				if invasoress[x].posicaox < zumatacado.posicaox:
+					zumatacado = invasoress[x]		
+
 			movimentar(invasoress, surface)
 			Torres.distancia(torre1, zumatacado)
 			Torres.atacar(torre1, zumatacado)
 			zumatacado.morte(jogador, surface, lista_torres)
+			t = castelo.endgame()
 
+			zumatacado = invasoress[3]
 			for x in range(0, len(invasoress)):
-				if invasoress[x].posicaox > zumatacado.posicaox:
+				if invasoress[x].posicaox < zumatacado.posicaox:
 					zumatacado = invasoress[x]
 			
 			movimentar(invasoress, surface)
 			Torres.distancia(torre2, zumatacado)
 			Torres.atacar(torre2, zumatacado)
 			zumatacado.morte(jogador, surface, lista_torres)
+			t = castelo.endgame()
+			
+
 			for x in range(0, len(invasoress)):
-				if invasoress[x].posicaox > zumatacado.posicaox:
+				if invasoress[x].posicaox < zumatacado.posicaox:
 					zumatacado = invasoress[x]
+
 			
 			movimentar(invasoress, surface)
 			Torres.distancia(torre3, zumatacado)
 			Torres.atacar(torre3,zumatacado)
 			zumatacado.morte(jogador, surface, lista_torres)
+			t = castelo.endgame()
 
+			
 			for x in range(0, len(invasoress)):
-				if invasoress[x].posicaox > zumatacado.posicaox:
+				if invasoress[x].posicaox < zumatacado.posicaox:
 					zumatacado = invasoress[x]
+			
 			
 			movimentar(invasoress, surface)
 			Torres.distancia(torre4, zumatacado)
 			Torres.atacar(torre4, zumatacado)
 			zumatacado.morte(jogador, surface, lista_torres)
+			t = castelo.endgame()
 
+		elif t == 3:
+			return 2
 
 
 		pygame.display.update()
 		clock.tick(60)
+
+
+def game_finale(gameDisplay, tela_final1, tela_final2):
+	file = ("musica1.mp3")
+	pygame.mixer.music.load(file)
+	pygame.mixer.music.play(-1)
+	imagem1 = pygame.image.load(tela_final1)
+	imagem2 = pygame.image.load(tela_final2)
+	while True:
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				pygame.quit()
+				quit()
+		gameDisplay.fill(white)
+
+		gameDisplay.blit(imagem1, (300, 100))
+		time.sleep(0.6)
+		gameDisplay.blit(imagem2, (300, 100))
+
+
+		pygame.display.update()
+		clock.tick(60)
+		

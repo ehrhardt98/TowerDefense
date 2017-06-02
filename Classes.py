@@ -74,14 +74,23 @@ class Castelo:
 		self.posicaoy = posicao_y
 	
 		
-
-
-
 	def perdevida(self, invasores):
-		self.vida = self.vida - 1
+		print("1")
+		if invasores.posicaox <= self.posicaox:
+			print("2")
+			print (self.vida)
+			self.vida = self.vida - 10
+			invasores.posicaox = 10000
+			invasores.posicaoy = 5000
+
+
+	def endgame(self):
 		if self.vida <= 0:
-			t = 4
-			return t
+			x = 3
+			return x
+		else:
+			return 2
+
 
 
 
@@ -99,7 +108,7 @@ class Invasores:
 		self.dinheiro = dinheiro
 
 	def morte(self, jogador, gameDisplay, lista_torres):
-		if self.vida <= 0:			
+		if self.vida <= 0:	
 			self.posicaox = 10000
 			jogador.ganhadinheiro(self)
 			jogador.mostradinheiro(gameDisplay, lista_torres)
@@ -111,8 +120,8 @@ class Jogador:
 		self.dinheiro = dinheiro
 
 	def ganhadinheiro(self, invasores):
-			if invasores.vida < 0:
-				self.dinheiro = self.dinheiro + invasores.dinheiro
+		if invasores.vida <= 0:
+			self.dinheiro = self.dinheiro + invasores.dinheiro
 	
 	def mostradinheiro(self, gameDisplay, lista_torres):
 		mapa()

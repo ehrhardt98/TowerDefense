@@ -36,6 +36,9 @@ while not fechar:
 	if state == 1:
 		state = game_loop(invasoress)
 
+	if state == 2:
+		state = game_finale(gameDisplay, "gameover0.png", "gameover1.png")
+
 
 	pygame.display.update()
 	clock.tick(60)
